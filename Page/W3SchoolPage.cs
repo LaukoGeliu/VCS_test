@@ -18,7 +18,8 @@ namespace Automatinis1.Page
         private IWebElement closeCookiesButton => Driver.FindElement(By.Id("accept-choices"));
         private SelectElement carsNamesDropdown => new SelectElement(Driver.FindElement(By.Id("cars")));
         private IWebElement submitButton => Driver.FindElement(By.CssSelector("body>form>input[type=submit]"));
-        private IWebElement resultField => Driver.FindElement(By.ClassName("w3-container w3-large w3-border"));
+        private IWebElement resultField => Driver.FindElement(By.CssSelector(".w3-container.w3-large.w3-border"));
+        private IWebElement runButton => Driver.FindElement(By.ClassName("w3-button.w3-bar-item.w3-hover-white.w3-hover-text-green"));
 
         public W3SchoolPage(IWebDriver webdriver) : base(webdriver) { }
 
@@ -35,8 +36,9 @@ namespace Automatinis1.Page
             closeCookiesButton.Click();
         }
 
-        public void SelectCarsByValue(List<string> cars)
+        public void SelectCarsByText(List<string> cars)
         {
+            Driver.SwitchTo().Frame("iframeResult");
             carsNamesDropdown.DeselectAll();
             Actions action = new Actions(Driver);
             action.KeyDown(Keys.Control);
@@ -47,11 +49,13 @@ namespace Automatinis1.Page
                     if (option.Text.Equals(car) && !option.Selected)
                     {
                         carsNamesDropdown.SelectByText(car);
+                        //Driver.FindElement(By.Id("cars")).FindElement(By.XPath($"//option[. = '{car}']")).Click();
                     }
             }
             action.KeyUp(Keys.Control);
             action.Build().Perform();
         }
+
 
         public void ClickSubmitButton()
         { submitButton.Click(); }
@@ -60,9 +64,14 @@ namespace Automatinis1.Page
         {
             foreach (string car in cars)
             {
-                Assert.IsTrue(resultField.Text.Contains(car), $"{car} car is not present");
+                Assert.IsTrue(resultField.Text.Contains(car.ToLower()), $"{car} car is not present, {resultField.Text}");
             }
+        }
+
+        public void RestartPage ()
+        {
+            Driver.SwitchTo().DefaultContent();
+            runButton.Click();
         }
     }
 }
-
