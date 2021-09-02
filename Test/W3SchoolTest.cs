@@ -31,17 +31,17 @@ namespace Automatinis1.Test
             page.CloseBrowser();
         }
 
-        [TestCase("volvo", TestName = "Test dropdown with one - Volvo -  value")]
-        [TestCase("saab", "opel", TestName = "Test dropdown with two - Saab, Opel - values")]
-        [TestCase("volvo", "saab", "opel", "audi", TestName = "Test dropdown with all - Volvo, Saab, Opel, Audi - values")]
+        [TestCase("Volvo", TestName = "Test dropdown with one - Volvo -  value")]
+        [TestCase("Saab", "Opel", TestName = "Test dropdown with two - Saab, Opel - values")]
+        [TestCase("Volvo", "Saab", "Opel", "Audi", TestName = "Test dropdown with all - Volvo, Saab, Opel, Audi - values")]
         public static void TestCarsDropdown(params string[] cars)
         {
 
             List<string> carsList = cars.ToList();
-            page.SelectCarsByValue(carsList);
+            page.SelectCarsByText(carsList);
             page.ClickSubmitButton();
             page.VerifySelectedCarsResult(carsList);
         }
     }
-    
+
 }
