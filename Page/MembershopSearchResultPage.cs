@@ -19,7 +19,7 @@ namespace MembershopTest.Page
         private IWebElement minSlider => Driver.FindElement(By.XPath("//span[@id='sn-slider-min']"));
         private IReadOnlyCollection<IWebElement> itemPriceFields => Driver.FindElements(By.XPath("//div[@class='text-center']/span//strong"));    //(By.XPath("//*[@id='docs-container']//span//strong"));
         private IWebElement priceToField => Driver.FindElement(By.XPath("//*[@class='priceTo currency-width-1']"));
-        private IWebElement maxPriceF => Driver.FindElement(By.XPath("//input[@name='priceTo']"));
+        private IWebElement _sliderScale => Driver.FindElement(By.Id("sn-slider-scale"));
 
         public MembershopSearchResultPage(IWebDriver webdriver) : base(webdriver)
         { }
@@ -34,24 +34,13 @@ namespace MembershopTest.Page
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
             js.ExecuteScript("arguments[0].scrollIntoView();", maxSlider);
-            //Actions ClickandHold();MoveToOffset();
+            double sliderWidth = maxSlider.Size.Width;
+            double sliderScaleWidth = _sliderScale.Size.Width;
             double maxPriceDefult = Int32.Parse(maxPriceDefault.GetAttribute("value"));
-            double sliderWidth = Convert.ToInt16(maxSlider.GetAttribute("style").Split(' ')[1].Substring(0, (maxSlider.GetAttribute("style").Split(' ')[1]).Length - 3));
-            int pixelsMoveToLeft = Convert.ToInt32(-(sliderWidth - (maxPrice * sliderWidth / maxPriceDefult)));
+            int pixelsMoveToLeft = Convert.ToInt32(Math.Round((-(sliderScaleWidth - (maxPrice * (sliderScaleWidth) / maxPriceDefult))+sliderWidth)));
             Actions action = new Actions(Driver);
             Actions moveSlider = new Actions(Driver);
             action.ClickAndHold(maxSlider).MoveByOffset(pixelsMoveToLeft, 0).Release().Build();
-            action.Perform();
-        }
-        public void SetMaxPriceBySlider_another(int maxPrice)
-        {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
-            js.ExecuteScript("arguments[0].scrollIntoView();", maxSlider);
-            //Actions ClickandHold();MoveToOffset();
-            Actions action = new Actions(Driver);
-            Actions moveSlider = new Actions(Driver);
-            int pricewant = Int32.Parse(maxPriceF.GetAttribute("value"));
-            action.ClickAndHold(maxSlider).MoveByOffset((pricewant= maxPrice),0).Release().Build();
             action.Perform();
         }
 
