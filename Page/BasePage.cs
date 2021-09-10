@@ -1,19 +1,27 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 
-namespace Automatinis1.Page
+namespace MembershopTest.Page
 {
     public class BasePage
     {
-        protected IWebDriver Driver;
-        public BasePage(IWebDriver webdriver)
+        protected static IWebDriver Driver;
+
+        public BasePage(IWebDriver webDriver)
         {
-            Driver = webdriver;
+            Driver = webDriver;
+        }
+
+        public WebDriverWait GetWait(int seconds = 5)
+        {
+            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(seconds));
+            return wait;
         }
 
         public void CloseBrowser()
         {
-            Driver.Quit();
+            //Driver.Quit();
         }
-
     }
 }
