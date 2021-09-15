@@ -12,6 +12,8 @@ namespace MembershopTest.Page
 {
     public class ActivePage : BasePage
     {
+        private string distanceType;
+        private string paceType;
         private const string PageAddress = "https://www.active.com/fitness/calculators/pace";
         private IWebElement popUpAdvertisement => Driver.FindElement(By.ClassName("virtual-events-modal__inner"));
         private IWebElement popUpAdvertisementCloseButton => Driver.FindElement(By.ClassName("virtual-events-modal__close"));
@@ -21,9 +23,9 @@ namespace MembershopTest.Page
         private IWebElement runningTimeMinutes => Driver.FindElement(By.Name("time_minutes"));
         private IWebElement runningDistance => Driver.FindElement(By.Name("distance"));
         private IWebElement dropdownDistanceTypeElement => Driver.FindElement(By.XPath("//span//*[@class='selectboxit ignore_selectbox selectboxit-enabled selectboxit-btn'][@name='distance_type']"));
-        private IWebElement dropdownDistanceTypeKm => Driver.FindElement(By.XPath("//ul//li[@data-val='km'][contains(.,'Kilometers')]"));
+        private IWebElement dropdownDistanceTypeKm => Driver.FindElement(By.XPath($"//ul//li[@data-val='km'][contains(.,'{distanceType}')]"));
         private IWebElement dropdownSpeedPerHourTypeField => Driver.FindElement(By.XPath("//span//*[@class='selectboxit ignore_selectbox selectboxit-enabled selectboxit-btn'][@name='pace_type']"));
-        private IWebElement dropdownSpeedPerHourTypePerKm => Driver.FindElement(By.XPath("//span//*[@data-val='km'][contains(.,'per km')]"));
+        private IWebElement dropdownSpeedPerHourTypePerKm => Driver.FindElement(By.XPath($"//span//*[@data-val='km'][contains(.,'{paceType}')]"));
         private IWebElement calculateButton => Driver.FindElement(By.CssSelector(".btn.btn-medium-yellow.calculate-btn"));
         private IWebElement paceResultMin => Driver.FindElement(By.XPath("//input[@name='pace_minutes']"));
         private IWebElement paceResultHours => Driver.FindElement(By.XPath("//input[@name='pace_hours']"));
@@ -63,7 +65,7 @@ namespace MembershopTest.Page
         public void InsertRunningDistance(string distance)
         { runningDistance.SendKeys(distance); }
 
-        public void SelectRunningDistanceKm()
+        public void SelectRunningDistance(string distanceType)
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
             js.ExecuteScript("arguments[0].scrollIntoView();", dropdownDistanceTypeElement);
@@ -72,7 +74,7 @@ namespace MembershopTest.Page
             dropdownDistanceTypeKm.Click();
         }
 
-        public void SelectRunningSpeedPerHourTypeKmPerHour()
+        public void SelectRunningPacePerHourType(string paceType)
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
             js.ExecuteScript("arguments[0].scrollIntoView();", dropdownSpeedPerHourTypeField);
